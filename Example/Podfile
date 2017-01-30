@@ -1,0 +1,6 @@
+use_frameworks!
+target 'musli_Tests' do
+  pod 'musli', :path => '../'
+  
+  
+end
