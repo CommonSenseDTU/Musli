@@ -16,7 +16,7 @@ import ResearchKit
     The consent document is used for serializing and deserializing consent
     documents from the backend and for getting visual consent step sections.
 */
-public class ConsentSection: NSObject {
+open class ConsentSection: NSObject {
     public var id = UUID().uuidString.lowercased()
     public var creationDateTime = Date()
     public var modificationDateTime = Date()

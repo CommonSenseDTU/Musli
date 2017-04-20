@@ -10,7 +10,7 @@ import Foundation
 import ResearchKit
 
 /// Delegate which Handles user interaction from the consent flow
-public class ConsentFlowDelegate: NSObject, ORKTaskViewControllerDelegate {
+open class ConsentFlowDelegate: NSObject, ORKTaskViewControllerDelegate {
 
     // The survey which the user is consenting to
     var survey: Survey

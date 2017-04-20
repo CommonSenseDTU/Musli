@@ -14,13 +14,13 @@ import ResearchKit
     Specialization of the ```ORKConsentSignature``` which has ```RestKit```
     serialition functionality.
 */
-public class Signature: ORKConsentSignature {
+open class Signature: ORKConsentSignature {
 
     /// Document which is is consented to with this signature.
     var consentDocument = ConsentDocument()
 
     /// Create a signature instance
-    override init() {
+    override public init() {
         super.init()
         self.identifier = self.identifier.lowercased()
     }

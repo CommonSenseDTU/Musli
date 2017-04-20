@@ -9,7 +9,7 @@
 import Foundation
 
 /// User account object, normally created by the consent flow manager.
-public class User: NSObject {
+open class User: NSObject {
     public var id = UUID().uuidString.lowercased()
     public var userId: String?
     public var password: String?

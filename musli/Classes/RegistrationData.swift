@@ -10,7 +10,7 @@ import Foundation
 import RestKit
 
 /// Client side representation of data used to register a new user.
-public class RegistrationData: NSObject {
+open class RegistrationData: NSObject {
     public var userId = ""
     public var password = ""
 

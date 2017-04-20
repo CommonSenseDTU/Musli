@@ -10,7 +10,7 @@ import Foundation
 import RestKit
 
 /// Client side representation of a survey object.
-public class Survey: NSObject {
+open class Survey: NSObject {
     public var id = ""
     public var title = ""
     public var userId = ""
