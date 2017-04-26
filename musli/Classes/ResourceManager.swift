@@ -8,6 +8,9 @@
 
 import Foundation
 import RestKit
+//private let server = "https://commonsensetest.compute.dtu.dk/v1"
+private let server = "http://localhost:8000/v1"
+
 
 /**
     Manager class used for passing resources between client and backend,
@@ -58,7 +61,7 @@ public class ResourceManager {
         or a users request is being made.
     */
     private lazy var authManager: RKObjectManager = {
-        let authManager = RKObjectManager(baseURL: NSURL(string: "http://localhost:8082") as URL!)!
+        let authManager = RKObjectManager(baseURL: NSURL(string: server) as URL!)!
         let response = RKResponseDescriptor(mapping: OAuthResponse.mapping,
                                             method: .POST,
                                             pathPattern: "/oauth/token",
@@ -78,7 +81,7 @@ public class ResourceManager {
         flow requests with a ```Survey``` object mapped as a response object.
     */
     private lazy var resourceManager: RKObjectManager = {
-        let resourceManager = RKObjectManager(baseURL: NSURL(string: "http://localhost:8083/v1.0.M1") as URL!)!
+        let resourceManager = RKObjectManager(baseURL: NSURL(string: server) as URL!)!
         resourceManager.requestSerializationMIMEType = RKMIMETypeJSON
 
         let surveyDescriptor = RKResponseDescriptor(mapping: Survey.mapping,
@@ -96,7 +99,7 @@ public class ResourceManager {
         upload requests with a ```Signature``` object mapped for requests.
     */
     private lazy var privateManager: RKObjectManager = {
-        let privateManager = RKObjectManager(baseURL: NSURL(string: "http://localhost:8084/v1.0.M1") as URL!)!
+        let privateManager = RKObjectManager(baseURL: NSURL(string: server) as URL!)!
         privateManager.requestSerializationMIMEType = RKMIMETypeJSON
         let descriptor = RKRequestDescriptor(mapping: Signature.inverseMapping,
                                              objectClass: Signature.self,
