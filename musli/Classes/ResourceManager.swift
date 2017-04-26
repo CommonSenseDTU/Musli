@@ -64,7 +64,7 @@ public class ResourceManager {
         let authManager = RKObjectManager(baseURL: NSURL(string: server) as URL!)!
         let response = RKResponseDescriptor(mapping: OAuthResponse.mapping,
                                             method: .POST,
-                                            pathPattern: "/oauth/token",
+                                            pathPattern: "oauth/token",
                                             keyPath: nil,
                                             statusCodes: IndexSet(integer: 200))
         authManager.addResponseDescriptor(response)
