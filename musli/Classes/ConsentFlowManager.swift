@@ -6,12 +6,12 @@
 //
 //
 
-import Foundation
+import UIKit
 import ResearchKit
 import RestKit
 
 /**
-    Manager class used for generating a consent for view controller which presents
+    Manager class used for generating a consent flow view controller which presents
     the visual consent steps in the consent document, the user registration and
     the sharing options.
 
@@ -43,8 +43,12 @@ public class ConsentFlowManager {
         self.delegate = ConsentFlowDelegate(survey: survey, resourceManager: resourceManager)
     }
 
-    /// View controller which presents a consent flow.
-    public var viewController: UIViewController {
+    /**
+        View controller which presents a consent flow.
+     
+        - parameter register: true if account registration should be added
+    */
+    public func viewController(register: Bool = true) -> UIViewController {
         var steps = [ORKStep]()
 
         // Create a visual consent step.
@@ -65,8 +69,8 @@ public class ConsentFlowManager {
         let signatureRequirements = survey.consentDocument.sections.filter({ $0.type == "signature" })
         if reviews.count > 0 {
             let review = reviews.first!
-            if nameRequirements.count > 0 { signature.requiresName = true }
-            if signatureRequirements.count > 0 { signature.requiresSignatureImage = true }
+            if nameRequirements.count == 0 { signature.requiresName = false }
+            if signatureRequirements.count == 0 { signature.requiresSignatureImage = false }
             visualDocument.signatures = [signature]
 
             let step = ORKConsentReviewStep(identifier: "review",
@@ -99,35 +103,37 @@ public class ConsentFlowManager {
             date of birth input fields if configured so in the relevant consent
             section.
         */
-        let registrationRequirements = survey.consentDocument.sections.filter({ $0.type == "registration" })
-        var registrationOptions: ORKRegistrationStepOption = []
-        var registration = ConsentSection()
-        if registrationRequirements.count > 0 {
-            let registration = registrationRequirements.first!
-            for option in registration.options {
-                switch option {
-                case "includeGivenName":
-                    registrationOptions.update(with: .includeGivenName)
-                case "includeFamilyName":
-                    registrationOptions.update(with: .includeFamilyName)
-                case "includeGender":
-                    registrationOptions.update(with: .includeGivenName)
-                case "includeDOB":
-                    registrationOptions.update(with: .includeDOB)
-                default:
-                    break
+        if register {
+            let registrationRequirements = survey.consentDocument.sections.filter({ $0.type == "registration" })
+            var registrationOptions: ORKRegistrationStepOption = []
+            let registration = ConsentSection()
+            if registrationRequirements.count > 0 {
+                let registration = registrationRequirements.first!
+                for option in registration.options {
+                    switch option {
+                    case "includeGivenName":
+                        registrationOptions.update(with: .includeGivenName)
+                    case "includeFamilyName":
+                        registrationOptions.update(with: .includeFamilyName)
+                    case "includeGender":
+                        registrationOptions.update(with: .includeGivenName)
+                    case "includeDOB":
+                        registrationOptions.update(with: .includeDOB)
+                    default:
+                        break
+                    }
                 }
+            } else {
+                registration.title = "Account Registration"
+                registration.summary = "Please register at this point"
             }
-        } else {
-            registration.title = "Account Registration"
-            registration.summary = "Please register at this point"
+            
+            let registrationStep = ORKRegistrationStep(identifier: "registration",
+                                                       title: registration.title,
+                                                       text: registration.summary,
+                                                       options: registrationOptions)
+            steps.append(registrationStep)
         }
-
-        let registrationStep = ORKRegistrationStep(identifier: "registration",
-                                                   title: registration.title,
-                                                   text: registration.summary,
-                                                   options: registrationOptions)
-        steps.append(registrationStep)
 
         // Create a view controller which includes the steps above in order
         let task = ORKOrderedTask(identifier: survey.id, steps: steps)
