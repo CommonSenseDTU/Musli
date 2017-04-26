@@ -44,7 +44,7 @@ open class Signature: ORKConsentSignature {
     }()
 
     /// Date object attribute for the signatureDate string.
-    internal var date: Date? {
+    public var date: Date? {
         get {
             guard let signatureDate = self.signatureDate else { return nil }
             return Signature.formatter.date(from: signatureDate)
@@ -53,6 +53,12 @@ open class Signature: ORKConsentSignature {
             guard let date = aDate else { return }
             self.signatureDate = Signature.formatter.string(from: date)
         }
+    }
+    
+    public var base64SignatureImage: String? {
+        guard let image = self.signatureImage else { return nil }
+        guard let data = UIImageJPEGRepresentation(image, 0.8) else { return nil }
+        return (data as NSData).base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
     }
 
     /*
@@ -65,22 +71,21 @@ open class Signature: ORKConsentSignature {
         mapping.addAttributeMappings(from: [
             "identifier": "id",
             "givenName": "first_name",
-            "familyName": "last_name",
-            "date": "creation_date_time"
+            "familyName": "last_name"
         ])
 
         let documentMapping = ConsentDocument.mapping.inverse()
         mapping.addPropertyMapping(RKRelationshipMapping(fromKeyPath: "consentDocument", toKeyPath: "document", with: documentMapping))
 
         let validation = { (sourceClass: AnyClass?, destinationClass: AnyClass?) -> Bool in
-            guard sourceClass is UIImage else { return false }
-            guard destinationClass is NSString else { return false }
+            guard sourceClass is UIImage.Type else { return false }
+            guard destinationClass is NSString.Type else { return false }
             return true
         }
 
         let transformation = { (inputValue: Any?, outputValue: AutoreleasingUnsafeMutablePointer<AnyObject?>?, outputValueClass: AnyClass?, error: NSErrorPointer) -> Bool in
             guard let image = inputValue as? UIImage else { return false }
-            guard outputValueClass is NSString else { return false }
+            guard outputValueClass is NSString.Type else { return false }
 
             guard let data = UIImageJPEGRepresentation(image, 0.8) else { return false }
             let base64String = (data as NSData).base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
