@@ -13,6 +13,7 @@ open class User: NSObject {
     public var id = UUID().uuidString.lowercased()
     public var userId: String?
     public var password: String?
+    public var refresh: String?
     public var firstName: String?
     public var lastName: String?
     public var gender: String?
@@ -21,7 +22,7 @@ open class User: NSObject {
 
     /// Registration data used for authorization and account creation.
     public var registrationData: RegistrationData {
-        var registration = RegistrationData()
+        let registration = RegistrationData()
         registration.userId = userId ?? ""
         registration.password = password ?? ""
         return registration

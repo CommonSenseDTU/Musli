@@ -20,6 +20,12 @@ open class ConsentFlowDelegate: NSObject, ORKTaskViewControllerDelegate {
         the consent signature.
     */
     public var resourceManager: ResourceManager
+    
+    /**
+        Set this is a local user account already exists. In that case that user account
+        is used instead of creating a new one on completion of the registration flow.
+     */
+    public var existingUser: User?
 
     // The latest result of the consent flow
     private var result: ORKTaskResult?
@@ -30,7 +36,7 @@ open class ConsentFlowDelegate: NSObject, ORKTaskViewControllerDelegate {
         This is called upon errors and upon completion of the consent flow.
     */
     // TODO: Create an ErrorBlock and call that in stead of the completion block for 409 errors
-    public typealias Completion = (_ controller: UIViewController, _ user: User?, _ authRefreshToken: String?, _ error: Error?) -> Void
+    public typealias Completion = (_ controller: UIViewController, _ user: User?, _ error: Error?) -> Void
     public var consentCompletion: Completion?
 
     /**
@@ -56,7 +62,7 @@ open class ConsentFlowDelegate: NSObject, ORKTaskViewControllerDelegate {
         - returns: A new ```User``` object
     */
     private func user(registrationResult: ORKStepResult) -> User {
-        var user = User()
+        let user = User()
         guard let results = registrationResult.results else { return user }
         for result in results {
             guard let textResult = result as? ORKTextQuestionResult else { continue }
@@ -93,10 +99,10 @@ open class ConsentFlowDelegate: NSObject, ORKTaskViewControllerDelegate {
     public func taskViewController(_ taskViewController: ORKTaskViewController, didFinishWith reason: ORKTaskViewControllerFinishReason, error: Error?) {
         switch reason {
         case .completed:
-            var user: User? = nil
+            var user: User? = existingUser
             var signature: Signature? = nil
             defer {
-                if user != nil && signature != nil {
+                if user != nil {
                     /*
                         A new signature instance is created as a part of the
                         consent flow. Ensure that the consent document is set in
@@ -111,29 +117,36 @@ open class ConsentFlowDelegate: NSObject, ORKTaskViewControllerDelegate {
                         Authorization is initiated below.
                     */
                     let authCompletion = { (refreshToken: String?, error: Error?) in
-                        guard error == nil else { self.consentCompletion?(taskViewController, user, refreshToken, error) ; return }
+                        user?.refresh = refreshToken
+                        guard error == nil else { self.consentCompletion?(taskViewController, user, error) ; return }
+                        guard signature != nil else { self.consentCompletion?(taskViewController, user, error) ; return }
                         self.resourceManager.upload(signature: signature!,
                                                     completion: { (success: Bool, error: Error?) in
-                                                        self.consentCompletion?(taskViewController, user, refreshToken, error)
+                                                        self.consentCompletion?(taskViewController, user, error)
                         })
                     }
 
                     // Authorize after user account is created (below).
                     let createCompletion = { (success: Bool, error: Error?) in
-                        guard success else { self.consentCompletion?(taskViewController, nil, nil, error) ; return }
+                        guard success else { self.consentCompletion?(taskViewController, nil, error) ; return }
                         self.resourceManager.authorize(username: user!.userId!,
                                                        password: user!.password!,
                                                        completion: authCompletion)
                     }
 
-                    // Create a user account
-                    self.resourceManager.create(user: user!, completion: createCompletion)
+                    if existingUser != nil {
+                        // A user already exists, just authorize
+                        createCompletion(true, nil)
+                    } else {
+                        // Create a user account
+                        self.resourceManager.create(user: user!, completion: createCompletion)
+                    }
                 } else {
                     /*
                         If user or signature is missing, then call completion
                         with an error.
                     */
-                    self.consentCompletion?(taskViewController, nil, nil, error)
+                    self.consentCompletion?(taskViewController, nil, error)
                 }
             }
 
@@ -158,6 +171,20 @@ open class ConsentFlowDelegate: NSObject, ORKTaskViewControllerDelegate {
         default:
             break
         }
+    }
+    
+    private func step(orkStep: ORKStep?) -> Step? {
+        guard orkStep != nil else { return nil }
+        for step in survey.task.steps {
+            if step.id == orkStep?.identifier {
+                return step
+            }
+        }
+        return nil
+    }
+
+    public func taskViewController(_ taskViewController: ORKTaskViewController, stepViewControllerWillAppear stepViewController: ORKStepViewController) {
+        stepViewController.cancelButtonItem = nil
     }
 
     public func taskViewController(_ taskViewController: ORKTaskViewController, didChange result: ORKTaskResult) {
