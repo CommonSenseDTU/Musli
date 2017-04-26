@@ -18,6 +18,7 @@ open class Survey: NSObject {
     public var creationDateTime = Date()
     public var modificationDateTime = Date()
     public var consentDocument = ConsentDocument()
+    public var task = Task()
     public var participantIds = [String]()
 
     public static let attributeMap: Dictionary<String, String> = [
@@ -36,6 +37,9 @@ open class Survey: NSObject {
 
         let documentMapping = ConsentDocument.mapping
         mapping.addPropertyMapping(RKRelationshipMapping(fromKeyPath: "consent_document", toKeyPath: "consentDocument", with: documentMapping))
+        
+        let taskMapping = Task.mapping
+        mapping.addPropertyMapping(RKRelationshipMapping(fromKeyPath: "task", toKeyPath: "task", with: taskMapping))
 
         return mapping
     }()
