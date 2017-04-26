@@ -282,7 +282,8 @@ public class ResourceManager {
     */
     public func create(user: User, completion: @escaping ((_ success: Bool, _ error: Error?) -> Void)) {
         let failure = { (op: RKObjectRequestOperation?, error: Error?) in
-            if ((error as? NSError)?.userInfo[AFRKNetworkingOperationFailingURLResponseErrorKey] as? HTTPURLResponse)?.statusCode == 409 {
+            guard error != nil else { completion(false, error) ; return }
+            if ((error! as NSError).userInfo[AFRKNetworkingOperationFailingURLResponseErrorKey] as? HTTPURLResponse)?.statusCode == 409 {
                 completion(false, UserCreationError.userIdConflict)
             } else {
                 completion(false, error)
