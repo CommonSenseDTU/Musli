@@ -8,6 +8,8 @@
 
 import Foundation
 import RestKit
+import Granola
+
 //private let server = "https://commonsensetest.compute.dtu.dk/v1"
 private let server = "http://localhost:8000/v1"
 
@@ -109,6 +111,8 @@ public class ResourceManager {
         return privateManager
     }()
 
+    public var consent: ORKConsent?
+    
     /**
         Create a ```ResourceManager``` instance.
 
@@ -198,6 +202,7 @@ public class ResourceManager {
             data?.appendPart(withForm: "refresh_token".data(using: .utf8), name: "grant_type")
             data?.appendPart(withForm: token.data(using: .utf8), name: "refresh_token")
         }
+        authManager.requestSerializationMIMEType = RKMIMETypeFormURLEncoded
         let request = authManager.multipartFormRequest(with: nil,
                                                        method: .POST,
                                                        path: "oauth/token",
@@ -270,6 +275,22 @@ public class ResourceManager {
                             parameters: [:],
                             success: success,
                             failure: failure)
+    }
+    
+    
+    public func upload(json: [AnyHashable: Any], completion: @escaping ((_ success: Bool, _ error: Error?) -> Void)) {
+        let success = { (op: RKObjectRequestOperation?, result: RKMappingResult?) in
+            completion(true, nil)
+        }
+        let failure = { (op: RKObjectRequestOperation?, error: Error?) in
+            completion(false, error)
+        }
+        
+        resourceManager.post(nil,
+                             path: "dataPoints",
+                             parameters: json,
+                             success: success,
+                             failure: failure)
     }
 
     /**
