@@ -278,16 +278,21 @@ public class ResourceManager {
     }
     
     
-    public func upload(json: [AnyHashable: Any], completion: @escaping ((_ success: Bool, _ error: Error?) -> Void)) {
+    public func upload(json: [AnyHashable: Any], forStep step: Step, completion: @escaping ((_ success: Bool, _ error: Error?) -> Void)) {
         let success = { (op: RKObjectRequestOperation?, result: RKMappingResult?) in
             completion(true, nil)
         }
         let failure = { (op: RKObjectRequestOperation?, error: Error?) in
             completion(false, error)
         }
+
+        var path = "dataPoints"
+        if step.isPrivate {
+            path = "private/dataPoints"
+        }
         
         resourceManager.post(nil,
-                             path: "dataPoints",
+                             path: path,
                              parameters: json,
                              success: success,
                              failure: failure)

@@ -14,6 +14,7 @@ open class Step: NSObject {
     public var id = ""
     public var title = ""
     public var type = ""
+    public var isPrivate = false
     public var sensors = [String]()
     public var settings = [String: Any]()
     public var items = [StepItem]()
@@ -23,7 +24,8 @@ open class Step: NSObject {
         "title": "title",
         "type": "type",
         "sensors": "sensors",
-        "settings": "settings"
+        "settings": "settings",
+        "private": "isPrivate"
     ]
     
     internal static let mapping: RKObjectMapping = {
