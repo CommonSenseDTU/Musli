@@ -414,6 +414,8 @@
 		8F9E4F4C17AA6A2EBE79AE1905D04C1F /* ORKPieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C68338E6E8CBD9CDC8DE43A870CFA10 /* ORKPieChartView.m */; };
 		8FFECB964AEBE2F51C0224B2B7A5A70F /* UIImageView+AFRKNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = D8438F258986E41E8156F32B8BA4C660 /* UIImageView+AFRKNetworking.m */; };
 		90814D775E09F15720E38D621E9A700A /* ORKWaitStep.h in Headers */ = {isa = PBXBuildFile; fileRef = 01CA40FD7547125297DF234BAAF8B506 /* ORKWaitStep.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9081AFF61EC45E8700D5F8D1 /* ORKImageSelectionView+WebCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 9081AFF41EC45E8700D5F8D1 /* ORKImageSelectionView+WebCache.h */; };
+		9081AFF71EC45E8700D5F8D1 /* ORKImageSelectionView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 9081AFF51EC45E8700D5F8D1 /* ORKImageSelectionView+WebCache.m */; };
 		90A516AE1E7A9FE50045DADB /* CustomStepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A516A91E7A9FE50045DADB /* CustomStepViewController.swift */; };
 		90A516AF1E7A9FE50045DADB /* Step.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A516AA1E7A9FE50045DADB /* Step.swift */; };
 		90A516B01E7A9FE50045DADB /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A516AB1E7A9FE50045DADB /* Task.swift */; };
@@ -1247,6 +1249,8 @@
 		8FD7DDDA8E94CF9EED65DF4493F271F9 /* ORKLoginStepViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ORKLoginStepViewController.m; path = ResearchKit/Onboarding/ORKLoginStepViewController.m; sourceTree = "<group>"; };
 		903EF0D8237B1F2CA80D6B395A642140 /* RKEntityMapping.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RKEntityMapping.h; path = Code/CoreData/RKEntityMapping.h; sourceTree = "<group>"; };
 		90759AA5154484C810910F7E381D0061 /* RKEntityCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RKEntityCache.h; path = Code/CoreData/RKEntityCache.h; sourceTree = "<group>"; };
+		9081AFF41EC45E8700D5F8D1 /* ORKImageSelectionView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ORKImageSelectionView+WebCache.h"; sourceTree = "<group>"; };
+		9081AFF51EC45E8700D5F8D1 /* ORKImageSelectionView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ORKImageSelectionView+WebCache.m"; sourceTree = "<group>"; };
 		90A516A91E7A9FE50045DADB /* CustomStepViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomStepViewController.swift; sourceTree = "<group>"; };
 		90A516AA1E7A9FE50045DADB /* Step.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Step.swift; sourceTree = "<group>"; };
 		90A516AB1E7A9FE50045DADB /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
@@ -1716,6 +1720,8 @@
 			children = (
 				90A516A91E7A9FE50045DADB /* CustomStepViewController.swift */,
 				90A516AA1E7A9FE50045DADB /* Step.swift */,
+				9081AFF41EC45E8700D5F8D1 /* ORKImageSelectionView+WebCache.h */,
+				9081AFF51EC45E8700D5F8D1 /* ORKImageSelectionView+WebCache.m */,
 				90A516AB1E7A9FE50045DADB /* Task.swift */,
 				90A516AC1E7A9FE50045DADB /* TaskFlowDelegate.swift */,
 				90A516AD1E7A9FE50045DADB /* TaskFlowManager.swift */,
@@ -2693,6 +2699,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9081AFF61EC45E8700D5F8D1 /* ORKImageSelectionView+WebCache.h in Headers */,
 				219A15BAA75BB16D1D84BC9B3564FDD6 /* musli-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3656,6 +3663,7 @@
 				6987C74694AE842D22650CC15E3F44D9 /* ConsentFlowDelegate.swift in Sources */,
 				E927F6148D2F32ED0551F8520AC6DB00 /* ConsentFlowManager.swift in Sources */,
 				45B2D87A52890E034C52686C0DFDD3F4 /* ConsentSection.swift in Sources */,
+				9081AFF71EC45E8700D5F8D1 /* ORKImageSelectionView+WebCache.m in Sources */,
 				F3E85CDBB1F6F0CA442DADCF70A99534 /* musli-dummy.m in Sources */,
 				457982CAFE2C8B6FCBF142C81D7FE3D1 /* OAuthResponse.swift in Sources */,
 				2B2DD1BDD6A71848E354DBE4A7005550 /* RegistrationData.swift in Sources */,

@@ -43,4 +43,6 @@ TODO: Add long description of the pod here.
   s.dependency 'ResearchKit', '~> 1.3'
   s.dependency 'RKValueTransformers', '~> 1.1'
   s.dependency 'Granola', '~> 0.5'
+  s.dependency 'SDWebImage', '~> 3.8'
+  s.dependency 'Locksmith', '~> 3.0'
 end

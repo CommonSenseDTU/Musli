@@ -14,11 +14,17 @@ open class StepItem: NSObject {
     public var id = ""
     public var format = ""
     public var question = ""
+    public var imageUrls = [URL]()
+    public var selectedImageUrls = [URL]()
+    public var values = [String]()
     
     public static let attributeMap: Dictionary<String, String> = [
         "id": "id",
         "format": "format",
-        "question": "question"
+        "question": "question",
+        "urls": "imageUrls",
+        "selected_urls": "selecteImageUrls",
+        "values": "values"
     ]
     
     internal static let mapping: RKObjectMapping = {
@@ -88,6 +94,17 @@ open class StepItem: NSObject {
             return ORKAnswerFormat.emailAnswerFormat()
         case "location":
             return ORKAnswerFormat.locationAnswerFormat()
+        case "imagechoice":
+            var choices = [ORKImageChoice]()
+            for index in 0..<imageUrls.count {
+                choices.append(ORKImageChoice(normalImageURL: imageUrls[index],
+                                              selectedImageURL: selectedImageUrls[index],
+                                              placeHolderImage: nil,
+                                              selectedPlaceHolderImage: nil,
+                                              text: nil,
+                                              value: values[index] as NSCoding & NSCopying & NSObjectProtocol))
+            }
+            return ORKAnswerFormat.choiceAnswerFormat(with: choices)
         default:
             return nil
         }

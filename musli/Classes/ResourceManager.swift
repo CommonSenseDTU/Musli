@@ -10,8 +10,8 @@ import Foundation
 import RestKit
 import Granola
 
-//private let server = "https://commonsensetest.compute.dtu.dk/v1"
-private let server = "http://localhost:8000/v1"
+//fileprivate let server = "https://commonsensetest.compute.dtu.dk/v1"
+fileprivate let server = "http://localhost:8000/v1"
 
 
 /**
